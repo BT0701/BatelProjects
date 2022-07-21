@@ -12,11 +12,24 @@
 <body onload="initGame()">
 
     <h1>Mine Sweeper</h1>
+
+    <div class="boardsize">
+        <input type="radio" name="boardsize" value="4" checked="checked" onclick="init()">
+        <label for="Easy">Easy</label>
+
+        <input type="radio" name="boardsize" value="8" onclick="init()">
+        <label for="Normal">Normal</label>
+
+        <input type="radio" name="boardsize" value="12" onclick="init()">
+        <label for="Hard">Hard</label>
+    </div>
+
     <div>
         <button class=" game-set score">Score</button>
         <button class="game-set smiley" onclick="initGame()">🙂</button>
         <button class="game-set timer">Time</button>
     </div>
+
     <table class="board"></table>
 
     <script src="main.js"></script>

@@ -1,10 +1,10 @@
 'use strict'
 
-function createMat(ROWS, COLS) {
+function createMat(size) {
     var mat = []
-    for (var i = 0; i < ROWS; i++) {
+    for (var i = 0; i < size; i++) {
         var row = []
-        for (var j = 0; j < COLS; j++) {
+        for (var j = 0; j < size; j++) {
             row.push('')
         }
         mat.push(row)
@@ -15,7 +15,7 @@ function createMat(ROWS, COLS) {
 function createCell() {
     var cell = {
         minesAroundCount: 0,
-        isShown: true,
+        isShown: false,
         isMine: false,
         isMarked: false,
     }
@@ -23,6 +23,7 @@ function createCell() {
 }
 
 function timer() {
+    console.log(gStartTime);
     var currTime = new Date().getTime()
     var timePassed = new Date(currTime - gStartTime)
     var elTimer = document.querySelector('.timer')
@@ -32,8 +33,15 @@ function timer() {
     elTimer.innerText = `${mins + timePassed.getMinutes()}:${secs + timePassed.getSeconds()}`
 }
 
-
 function getClassName(location) {
     var cellClass = 'cell-' + location.i + '-' + location.j;
     return cellClass;
 }
+
+//not working yet
+// function drawMine() {
+//     var randIdx = getRandomInt(0, gBoard.length - 1)
+//     var res = gMinePos[randIdx]
+//     gMinePos.splice(randIdx, 1)
+//     return res
+// }

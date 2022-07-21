@@ -4,13 +4,16 @@ const MINE = '💣'
 const SMILEY = '🙂'
 const LOSE = '🤯'
 const WIN = '😎'
+const FLAG = '📌'
 
 var gBoard;
+var gBoardSize;
 var gSelectedElCell = null;
 var gMinePos;
 var gStartTime;
 var gScore;
 var gNumOfNeighbors;
+var gGameInterval;
 
 const gGame = {
     isOn: false,
@@ -18,12 +21,21 @@ const gGame = {
     markedCount: 0,
     timer: 0,
 }
-console.log(gGame);
+
+const gLevel = {
+    SIZE: gBoardSize,
+    MINES: 2,
+}
+console.log(gLevel.SIZE);
 
 function initGame() {
+    gGame.isOn = false
+    gBoardSize = +document.querySelector('input:checked').value
     gBoard = buildBoard()
     renderBoard(gBoard)
     gGame.timer = 0
+
+    if (gGameInterval) clearInterval(gGameInterval)
 
     var elSmiley = document.querySelector('.smiley')
     elSmiley.innerText = SMILEY
@@ -35,7 +47,7 @@ function initGame() {
 function buildBoard() {
     var board = []
 
-    board = createMat(4, 4)
+    board = createMat(gBoardSize)
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
 
@@ -55,7 +67,6 @@ function buildBoard() {
 }
 
 function renderBoard(board) {
-    gGame.isOn = true
     var elBoard = document.querySelector('.board');
     var strHTML = ''
 
@@ -63,6 +74,8 @@ function renderBoard(board) {
         strHTML += '<tr>\n'
 
         for (var j = 0; j < board[i].length; j++) {
+            var currCell = board[i][j]
+
             var cellClass = getClassName({ i, j })
 
             strHTML += `\t<td data-i="${i}" data-j="${j}" class="cell ${cellClass}"
@@ -76,16 +89,21 @@ function renderBoard(board) {
 }
 
 function cellClicked(gSelectedElCell, i, j) {
-    gGame.isOn = true
 
-    if (gGame.timer === 0) {
+    if (!gGame.isOn) {
+        gGame.isOn = true
+
+        //gMinePos after first click
+        // drawMine()
+
         gStartTime = new Date().getTime()
-        gGame.timer = setInterval(timer, 31)
+        gGameInterval = setInterval(timer, 31)
     }
 
     const cell = gBoard[i][j]
 
-    if (cell.isShown) {
+    if (!cell.isShown) {
+        cell.isShown = true
         gSelectedElCell.classList.add('selected')
 
         var mineNeighborCount = countNeighbors(i, j, gBoard)
@@ -99,22 +117,35 @@ function cellClicked(gSelectedElCell, i, j) {
         var elSmiley = document.querySelector('.smiley')
         elSmiley.innerText = LOSE
 
-        clearInterval(gGame.timer)
+        clearInterval(gGameInterval)
+        gGame.isOn = false
     }
 
     // if (cell.minesAroundCount === 0) {
-    //     expandshown(gNumOfNeighbors, i, j)
+    //     var res = expandshown(i, j, gBoard)
     // }
 }
 
-// function expandshown(gNumOfNeighbors, i, j) {
-//     var cell = gNumOfNeighbors.dataset.i
-//     console.log(cell);
+//not working yet
+
+// function expandshown(cellI, cellJ, board) {
+
+//     for (var i = cellI - 1; i <= cellI + 1; i++) {
+//         if (i < 0 || i >= board.length) continue;
+
+//         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+
+//             if (i === cellI && j === cellJ) continue;
+//             if (j < 0 || j >= board[i].length) continue;
+
+//             board[i][j].isShown = true
+//             gSelectedElCell.classList.add('selected')
+//         }
+//     }
 // }
 
 function countNeighbors(cellI, cellJ, board) {
     var mineNeighborCount = 0;
-    gNumOfNeighbors = [];
 
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= board.length) continue;
@@ -123,16 +154,14 @@ function countNeighbors(cellI, cellJ, board) {
 
             if (i === cellI && j === cellJ) continue;
             if (j < 0 || j >= board[i].length) continue;
-            gNumOfNeighbors.push({ i, j })
 
             if (board[i][j].isMine) mineNeighborCount++;
         }
     }
-    console.log(gNumOfNeighbors);
-    console.log(mineNeighborCount);
     return mineNeighborCount;
 }
 
 function checkVictory(gBoard) {
 
 }
+
