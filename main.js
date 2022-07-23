@@ -7,9 +7,10 @@ const WIN = '😎'
 const FLAG = '📌'
 
 var gBoard;
-var gBoardSize;
+var gBoardSize = 0;
 var gSelectedElCell = null;
 var gMinePos;
+var gNumOfMines = 0;
 var gStartTime;
 var gScore;
 var gNumOfNeighbors;
@@ -24,14 +25,19 @@ const gGame = {
 
 const gLevel = {
     SIZE: gBoardSize,
-    MINES: 2,
+    MINES: gNumOfMines,
 }
-console.log(gLevel.SIZE);
 
 function initGame() {
     gGame.isOn = false
+
+    var board = document.querySelector('.board')
+    board.classList.remove('game-over')
+
     gBoardSize = +document.querySelector('input:checked').value
+
     gBoard = buildBoard()
+
     renderBoard(gBoard)
     gGame.timer = 0
 
@@ -48,21 +54,13 @@ function buildBoard() {
     var board = []
 
     board = createMat(gBoardSize)
+
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[i].length; j++) {
 
             board[i][j] = createCell()
-            if (i === 1 && j === 2) {
-                board[i][j].isMine = true
-                board[i][j].isShown = false
-            }
-            if (i === 3 && j === 0) {
-                board[i][j].isMine = true
-                board[i][j].isShown = false
-            }
         }
     }
-    console.log(board);
     return board
 }
 
@@ -79,22 +77,46 @@ function renderBoard(board) {
             var cellClass = getClassName({ i, j })
 
             strHTML += `\t<td data-i="${i}" data-j="${j}" class="cell ${cellClass}"
-              onclick="cellClicked(this, ${i}, ${j})" >\n`;
+              onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="return handleFlags(this, ${i}, ${j})" >\n`;
             strHTML += '\t</td>\n';
 
         }
         strHTML += '</tr>\n';
     }
     elBoard.innerHTML = strHTML;
+    console.log(board);
 }
 
 function cellClicked(gSelectedElCell, i, j) {
 
     if (!gGame.isOn) {
-        gGame.isOn = true
 
-        //gMinePos after first click
-        // drawMine()
+        // gBoardSize = +document.querySelector('input:checked').mine
+
+        switch (gBoardSize) {
+            case 4:
+                gNumOfMines = 2
+                break;
+            case 8:
+                gNumOfMines = 12
+                break;
+            case 12:
+                gNumOfMines = 30
+                break;
+            default:
+                console.log("issue");
+                break;
+        }
+
+        var k = 0
+        while (k < gNumOfMines) {
+            gMinePos = addMinePos()
+            gBoard[gMinePos.i][gMinePos.j].isMine = true;
+            k++;
+        }
+        console.log(gBoard);
+
+        gGame.isOn = true
 
         gStartTime = new Date().getTime()
         gGameInterval = setInterval(timer, 31)
@@ -103,7 +125,7 @@ function cellClicked(gSelectedElCell, i, j) {
     const cell = gBoard[i][j]
 
     if (!cell.isShown) {
-        cell.isShown = true
+        cell.isShown === true
         gSelectedElCell.classList.add('selected')
 
         var mineNeighborCount = countNeighbors(i, j, gBoard)
@@ -112,21 +134,23 @@ function cellClicked(gSelectedElCell, i, j) {
     }
 
     if (cell.isMine) {
+        debugger
         gSelectedElCell.innerText = MINE
+        var board = document.querySelector('.board')
+        board.classList.add('game-over')
 
         var elSmiley = document.querySelector('.smiley')
         elSmiley.innerText = LOSE
 
         clearInterval(gGameInterval)
         gGame.isOn = false
+
     }
 
     // if (cell.minesAroundCount === 0) {
     //     var res = expandshown(i, j, gBoard)
     // }
 }
-
-//not working yet
 
 // function expandshown(cellI, cellJ, board) {
 
@@ -139,9 +163,9 @@ function cellClicked(gSelectedElCell, i, j) {
 //             if (j < 0 || j >= board[i].length) continue;
 
 //             board[i][j].isShown = true
-//             gSelectedElCell.classList.add('selected')
+//             if (!board[i][j].isMine) board[i][j].classList.add('selected')
 //         }
-//     }
+//     } 
 // }
 
 function countNeighbors(cellI, cellJ, board) {
@@ -161,7 +185,10 @@ function countNeighbors(cellI, cellJ, board) {
     return mineNeighborCount;
 }
 
-function checkVictory(gBoard) {
+// function checkVictory(gBoard) {
 
-}
+// }
+
+
+
 

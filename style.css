@@ -1,33 +1,69 @@
 body {
     background-color: blanchedalmond;
+    text-align: center;
+    font-size: large;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+h1 {
+    color: rgb(28, 26, 26);
+    background-color: salmon;
+    border-radius: 10px;
+    width: 500px;
+    height: 50px;
+    margin: auto;
+    margin-bottom: 10px;
+    border: 1px solid black;
 }
 
 .game-set {
     background-color: salmon;
     border-radius: 10px;
-    width: 60px;
+    width: 70px;
     height: 50px;
     display: inline-block;
+    margin: 5px;
+}
+
+.board {
+    margin: auto;
 }
 
 .boardsize {
     background-color: salmon;
     border-radius: 10px;
-    width: 200px;
+    width: 300px;
     height: 50px;
     display: inline-block;
-
+    border: 1px solid black;
+    margin-bottom: 20px;
 }
 
 .cell {
     width: 40px;
     height: 40px;
     margin: auto;
-    border: 1px solid black;
+    border: 2px solid rgb(52, 48, 48);
     text-align: center;
     background: linear-gradient(to top, rgb(60, 58, 58), gray);
 }
 
+.game-over:hover {
+    cursor: none;
+}
+
 .selected {
     background: linear-gradient(to top, rgb(147, 134, 134), gray);
+}
+
+.name {
+    color: rgb(28, 26, 26);
+    background-color: salmon;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    margin: auto;
+    margin-top: 30px;
+    border: 1px solid black;
+    text-align: center;
 }

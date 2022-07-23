@@ -14,23 +14,25 @@
     <h1>Mine Sweeper</h1>
 
     <div class="boardsize">
-        <input type="radio" name="boardsize" value="4" checked="checked" onclick="init()">
+
+        <input type="radio" name="boardsize" value="4" mine="2" checked="checked" onclick="initGame()" />
         <label for="Easy">Easy</label>
-
-        <input type="radio" name="boardsize" value="8" onclick="init()">
+        <input type="radio" name="boardsize" value="8" mine="12" onclick="initGame()" />
         <label for="Normal">Normal</label>
-
-        <input type="radio" name="boardsize" value="12" onclick="init()">
+        <input type="radio" name="boardsize" value="12" mine="30" onclick="initGame()" />
         <label for="Hard">Hard</label>
+
     </div>
 
     <div>
-        <button class=" game-set score">Score</button>
+        <button class="game-set score">Score</button>
         <button class="game-set smiley" onclick="initGame()">🙂</button>
         <button class="game-set timer">Time</button>
     </div>
 
     <table class="board"></table>
+
+    <footer class="name">🎀 Batel Timsit 🎀</footer>
 
     <script src="main.js"></script>
     <script src="utils.js"></script>

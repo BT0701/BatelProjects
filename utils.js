@@ -38,10 +38,27 @@ function getClassName(location) {
     return cellClass;
 }
 
-//not working yet
-// function drawMine() {
-//     var randIdx = getRandomInt(0, gBoard.length - 1)
-//     var res = gMinePos[randIdx]
-//     gMinePos.splice(randIdx, 1)
-//     return res
-// }
+function addMinePos() {
+    var emptyCells = getEmptyCells()
+    return emptyCells
+}
+
+function getEmptyCells() {
+    var emptyCells = []
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[i].length; j++) {
+            if (!gBoard[i][j].isShown && !gBoard[i][j].isMine) emptyCells.push({ i, j })
+        }
+    }
+
+    const idx = getRandomInt(0, emptyCells.length)
+    return emptyCells[idx]
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+
